@@ -1,0 +1,19 @@
+3 6 
+firstElementLocation:list length:5 
+result:2
+3 start 
+one:1 
+left:0 
+right:0 
+start:2 firstElementLocation one left
+1 firstElementLocation length right 
+checkNextPair:1 left one left
+2 right one right 
+5 left right checkPair 
+stop:9 
+checkPair:7 left leftCellValue 
+7 right rightCellValue
+4 leftCellValue:0 rightCellValue:0 checkNextPair 
+7 one result
+3 stop 
+list:1 2 3 2 1 

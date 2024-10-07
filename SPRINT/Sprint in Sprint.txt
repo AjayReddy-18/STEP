@@ -1,0 +1,109 @@
+3 xStart 
+programStatus:0
+xZero:0 
+xOne:1
+xTwo:2
+xFour:4
+xNinetyNine:99
+xThree:3
+xFive:5
+xSix:6
+xSeven:7 
+instruction:0
+instructionCell:program
+
+xStart:7 instructionCell currentInstructionCell 
+7 currentInstructionCell:0 instruction 
+
+4 xSeven instruction jump 
+4 xZero instruction copy 
+4 xOne instruction xSub
+4 xTwo instruction xAdd 
+4 xThree instruction put
+4 xFour instruction xLess 
+4 xFive instruction xEqual 
+4 xSix instruction xGreater  
+4 xNinetyNine instruction xStop
+2 xZero xOne programStatus 
+xStop:9 
+
+jump:1 instructionCell xOne instructionCell
+7 instructionCell jumpArguement
+7 jumpArguement:0 instructionCell
+3 xStart 
+
+xAdd:7 xOne operation 
+3 addOrSub 
+
+xSub:7 xTwo operation 
+3 addOrSub 
+
+xLess:7 xFive compareOperation 
+3 lessOrEqual 
+
+xEqual:7 xFour compareOperation 
+3 lessOrEqual
+
+addOrSub:1 instructionCell xOne instructionCell
+7 instructionCell arguementCell1
+1 instructionCell xOne instructionCell
+7 instructionCell arguementCell2
+1 instructionCell xOne instructionCell
+7 instructionCell arguementCell3
+7 arguementCell1:0 arguement1
+7 arguementCell2:0 arguement2
+7 arguementCell3:0 arguement3 
+operation:0 arguement1:0 arguement3:0 arguement2:0
+1 instructionCell xOne instructionCell  
+3 xStart
+
+lessOrEqual:1 instructionCell xOne instructionCell
+7 instructionCell compareArguementCell1
+1 instructionCell xOne instructionCell
+7 instructionCell compareArguementCell2
+7 compareArguementCell1:0 compareArguement1
+7 compareArguementCell2:0 compareArguement2
+compareOperation:0 compareArguement1:0  compareArguement2:0 satisfied 
+1 instructionCell xOne instructionCell 
+1 instructionCell xOne instructionCell  
+3 xStart
+satisfied:3 jump
+
+xGreater:1 instructionCell xOne instructionCell
+7 instructionCell greaterArguementCell1
+1 instructionCell xOne instructionCell
+7 instructionCell greaterArguementCell2
+7 greaterArguementCell1:0 greaterArguement1
+7 greaterArguementCell2:0 greaterArguement2
+5 greaterArguement2:0  greaterArguement1:0 greaterSatisfied 
+1 instructionCell xOne instructionCell 
+1 instructionCell xOne instructionCell  
+3 xStart
+greaterSatisfied:3 jump
+
+copy:1 instructionCell xOne instructionCell 
+7 instructionCell copyArguementCell1 
+1 instructionCell xOne instructionCell 
+7 instructionCell copyArguementCell2 
+7 copyArguementCell1:0 copyArguement1 
+7 copyArguementCell2:0 copyArguement2 
+7 copyArguement1:0 copyArguement2:0 
+3 xStart 
+
+put:1 instructionCell xOne instructionCell 
+7 instructionCell putArguement1 
+1 instructionCell xOne instructionCell 
+7 instructionCell putArguementCell2 
+7 putArguementCell2:0 putArguement2 
+7 putArguement1:0 putArguement2:0 
+3 xStart
+
+
+program:7 check
+a:20  result:0 b:10 
+check:6 a b add
+halt:99
+sub:1 a result b 
+7 halt
+add:2 a result b
+7 halt
