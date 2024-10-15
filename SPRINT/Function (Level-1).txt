@@ -1,0 +1,16 @@
+3 start 
+a:1 b:20 sum:0 
+two:2 
+address:0
+
+start:0 addCall address
+0 a operand1 
+0 b operand2
+1 address two returnCell
+
+addCall:3 add
+stop:9
+
+
+add:1 operand1:0 operand2:0 sum 
+3 returnCell:0

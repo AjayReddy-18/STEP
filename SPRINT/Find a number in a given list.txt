@@ -1,0 +1,18 @@
+3 7 
+firstElement:37 
+length:0
+target:2 
+result:0 
+3 start 
+elementsChecked:0 
+one:1 
+start:
+7 firstElement currentElement
+checkNextElement:4 length elementsChecked stop 
+4 currentElement:0 target targetFound 
+1 currentElement one currentElement 
+1 elementsChecked one elementsChecked
+3 checkNextElement 
+targetFound:7 one result 
+stop:9
+list:2
