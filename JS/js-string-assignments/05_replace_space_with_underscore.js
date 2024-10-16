@@ -1,4 +1,4 @@
-// Do not rename string, use it as input for your program.
+    // Do not rename string, use it as input for your program.
 // While testing we will change it's value.
 const string = "abcba jd sdj   ";
 // Replace all spaces with underscore "_"

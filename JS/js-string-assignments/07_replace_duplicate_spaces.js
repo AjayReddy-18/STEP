@@ -12,7 +12,7 @@ let requiredString = "";
 for (let currentIndex = 0; currentIndex < stringLength; currentIndex++) {
     const beforeCharacter = string[currentIndex - 1];
     const currentCharacter = string[currentIndex];
-    if (beforeCharacter !== " " || currentCharacter !== " ") {
+    if (beforeCharacter !== " " || currentCharacter !== " ") {  
         requiredString += currentCharacter;
     }
 }

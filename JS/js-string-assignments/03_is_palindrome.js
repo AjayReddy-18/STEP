@@ -8,12 +8,9 @@ let isPalindrome = true;
 let leftIndex = 0;
 let rightIndex = string.length - 1;
 
-while (leftIndex < rightIndex && isPalindrome) {
-    if (string[leftIndex] !== string[rightIndex]) {
-        isPalindrome = false;
-    }
+while (string[leftIndex] === string[rightIndex] && leftIndex < rightIndex) {
     leftIndex++;
     rightIndex--;
 }
 
-console.log(isPalindrome);
+console.log(leftIndex >= rightIndex);

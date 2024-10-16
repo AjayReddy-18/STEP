@@ -10,10 +10,12 @@ const stringLength = string.length;
 let beforeCharacter = " ";
 
 for (let currentIndex = 0; currentIndex < stringLength; currentIndex++) {
+    
     const currentCharacter = string[currentIndex];
     if (beforeCharacter === " " && currentCharacter !== " ") {
         numberOfWords++;
     }
+
     beforeCharacter = currentCharacter;
 }
 

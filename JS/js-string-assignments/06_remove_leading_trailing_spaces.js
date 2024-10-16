@@ -1,6 +1,6 @@
-// Do not rename string, use it as input for your program.
+// Do not rename string, use it as input for your program.≠
 // While testing we will change it's value.
-const string = "    a   b       ";
+const string = "  abcb  a     ";
 // Remove spaces at the start and end of the given string
 // If string = " spaces at the start and the end "
 // Then print "spaces at the start and the end"
@@ -9,26 +9,19 @@ const string = "    a   b       ";
 const stringLength = string.length;
 let leftIndex = 0;
 let rightIndex = stringLength - 1;
-let leftStartIndex = -1;
-let rightEndIndex = -2;
 
-while (leftStartIndex < 0 || rightEndIndex < 0 && leftIndex < stringLength) {
-    if (string[leftIndex] !== " " && leftStartIndex === -1) {
-        leftStartIndex = leftIndex;
-    }
-
-    if (string[rightIndex] !== " " && rightEndIndex === -2) {
-        rightEndIndex = rightIndex;
-    }
-
+while (string[leftIndex] === " ") {
     leftIndex++;
+}
+
+while (string[rightIndex] === " ") {
     rightIndex--;
 }
 
 let requiredString = "";
 
-for (let currentIndex = leftStartIndex; currentIndex <= rightEndIndex; currentIndex++) {
+for (let currentIndex = leftIndex; currentIndex <= rightIndex; currentIndex++) {
     requiredString += string[currentIndex];
 }
 
-console.log(requiredString.length);
+console.log(requiredString); 
