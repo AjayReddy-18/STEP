@@ -5,12 +5,9 @@ const matchedPegPos = '🩷';
 const matchedPegAtDifferentPos = '🤍';
 const nothingMatched = '⭕️';
 const SPACING = '\t';
-
-function printHeading() {
-  console.log('               MASTER MIND\n');
-  console.log('1 🔴 2 🟢 3 🟡 4 ⚪️ 5 🟣 6 🟤 7 🔵 8 🟠\n');
-  // console.log(colors, '\n');
-}
+const gameName = '\t\tMASTER MIND\n';
+const colorsWithNumbers = '\n1 🔴 2 🟢 3 🟡 4 ⚪️ 5 🟣 6 🟤 7 🔵 8 🟠\n\n';
+const promptsOnScreen = gameName + colorsWithNumbers;
 
 function randomOf(base) {
   const randomChoice = (Math.random() * 10) % base;
@@ -42,14 +39,22 @@ function isValidDigit(char) {
 }
 
 function areColorsValid(choice, count) {
-  if (choice.length !== count * 2) {
+  const length = count * 2;
+  if (choice.length !== length) {
     return false;
   }
 
-  for (let index = 0; index < count; index += 2) {
-    if (!isSubString(colors, choice[index] + choice[index + 1])) {
+  let currentColors = '';
+  for (let index = 0; index < length; index += 2) {
+    const currentColor = choice[index] + choice[index + 1]
+    if (!isSubString(colors, currentColor)) {
       return false;
     }
+
+    if (isSubString(currentColors, currentColor)) {
+      return false;
+    }
+    currentColors += currentColor;
   }
 
   return true;
@@ -74,7 +79,7 @@ function isChoiceValid(choice, count) {
 }
 
 function getColorCode() {
-  const choice = prompt('Enter the order of colors in number:');
+  const choice = prompt('Enter the order of colors or numbers:');
   return choice;
 }
 
@@ -153,25 +158,30 @@ function shuffle(string, times) {
   return shuffle(shuffledString, times - 1);
 }
 
-function getFeedback(pegs, guessedPegs) {
-  let feedBack = '';
+function getClue(pegs, guessedPegs) {
+  let clue = '';
   for (let index = 0; index < guessedPegs.length; index += 2) {
     const currentColor = guessedPegs[index] + guessedPegs[index + 1];
     const colorFound = isSubString(pegs, currentColor);
     const isPositionMatched = currentColor === pegs[index] + pegs[index + 1];
 
     if (colorFound) {
-      feedBack += isPositionMatched ? matchedPegPos : matchedPegAtDifferentPos;
+      clue += isPositionMatched ? matchedPegPos : matchedPegAtDifferentPos;
     }
 
     if (!colorFound) {
-      feedBack += nothingMatched;
+      clue += nothingMatched;
     }
   }
 
   const shuffleTimes = Math.ceil(Math.random() * 10);
-  const shuffledFeedback = shuffle(feedBack, shuffleTimes);
-  return shuffledFeedback;
+  const shuffledClue = shuffle(clue, shuffleTimes);
+  return shuffledClue;
+}
+
+function printResults(results) {
+  console.clear();
+  console.log(results);
 }
 
 function playMasterMind(count) {
@@ -179,22 +189,20 @@ function playMasterMind(count) {
   let guessedPegs = '';
   let pegsMatched = false;
   let numberOfGuesses = 0;
-  let previousResults = '';
+  let previousResults = promptsOnScreen;
 
   // console.log(pegsArrangement);
-  printHeading();
   while (!pegsMatched) {
+    printResults(previousResults);
     guessedPegs = getPegs(count);
     pegsMatched = pegsArrangement === guessedPegs;
     numberOfGuesses++;
     previousResults += guessedPegs + SPACING;
-    previousResults += getFeedback(pegsArrangement, guessedPegs) + '\n';
-    console.clear();
-    printHeading();
-    console.log(previousResults);
+    previousResults += getClue(pegsArrangement, guessedPegs) + '\n';
   }
-
-  console.log('You guessed the pegs in', numberOfGuesses, 'guess.');
+  
+  printResults(previousResults);
+  console.log('You guessed the pegs in', numberOfGuesses, 'guesses.');
 }
 
 playMasterMind(4);

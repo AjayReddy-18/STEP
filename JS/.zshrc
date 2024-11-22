@@ -1,0 +1,7 @@
+alias brave='open -a "Brave Browser"'
+alias ll='ls -la'
+alias settings='open -a "Settings"'
+alias zshopen='sudo nano ~/.zshrc && source ~/	zshrc'
+alias cls='deno ~/Workspace/JS/Testing/clear.js'
+alias timesheet='brave https://thoughtworks.lightning.force.com/lightning/n/TimeEntry'
+alias shutdown='sudo shutdown -h'

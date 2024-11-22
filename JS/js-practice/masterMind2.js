@@ -5,12 +5,9 @@ const matchedPegPos = '🩷';
 const matchedPegAtDifferentPos = '🤍';
 const nothingMatched = '⭕️';
 const SPACING = '\t';
-
-function printHeading() {
-  console.log('               MASTER MIND\n');
-  console.log('1 🔴 2 🟢 3 🟡 4 ⚪️ 5 🟣 6 🟤 7 🔵 8 🟠\n');
-  // console.log(colors, '\n');
-}
+const gameName = '\t\tMASTER MIND\n';
+const colorsWithNumbers = '\n1 🔴 2 🟢 3 🟡 4 ⚪️ 5 🟣 6 🟤 7 🔵 8 🟠\n\n';
+const promptsOnScreen = gameName + colorsWithNumbers;
 
 function randomOf(base) {
   const randomChoice = (Math.random() * 10) % base;
@@ -179,19 +176,16 @@ function playMasterMind(count) {
   let guessedPegs = '';
   let pegsMatched = false;
   let numberOfGuesses = 0;
-  let previousResults = '';
+  let previousResults = promptsOnScreen;
 
-  // console.log(pegsArrangement);
-  printHeading();
   while (!pegsMatched) {
+    console.log(previousResults);
     guessedPegs = getPegs(count);
     pegsMatched = pegsArrangement === guessedPegs;
     numberOfGuesses++;
     previousResults += guessedPegs + SPACING;
     previousResults += getFeedback(pegsArrangement, guessedPegs) + '\n';
     console.clear();
-    printHeading();
-    console.log(previousResults);
   }
 
   console.log('You guessed the pegs in', numberOfGuesses, 'guess.');
