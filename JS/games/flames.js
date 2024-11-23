@@ -1,5 +1,7 @@
 function getName(number) {
-  return prompt('Enter name' + number + ':');
+  const name = prompt('Enter name' + number + ':');
+  const nameWithoutSpaces =  removeSpaces(name, 0);
+  return toUpper(nameWithoutSpaces);
 }
 
 function slice(string, start, end) {
@@ -81,9 +83,23 @@ function removeSpaces(string, index) {
   return string[index] + removeSpaces(string, index + 1);
 }
 
+function toUpper(string) {
+  const lowerCase = 'abcdefghijklmnopqrstuvwxyz';
+  const upperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let upperCasedString = '';
+
+  for (let index = 0; index < string.length; index++) {
+    const charIndexOfUpperCase = findIndex(lowerCase, string[index]);
+    const isCharLowerCase = charIndexOfUpperCase !== -1;
+    upperCasedString += isCharLowerCase ? upperCase[charIndexOfUpperCase] : 
+    string[index];
+  }
+  return upperCasedString;
+}
+
 function playFlames() {
-  const name1 = removeSpaces(getName(1), 0);
-  const name2 = removeSpaces(getName(2), 0);
+  const name1 = getName(1);
+  const name2 = getName(2);
 
   const unmatchedCharsCount = getUnmatchedCharsCount(name1, name2);
   return getResult(unmatchedCharsCount);
