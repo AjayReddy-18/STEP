@@ -1,3 +1,29 @@
+function removeSpaces(string, index) {
+  if (index === string.length) {
+    return '';
+  }
+
+  if (string[index] === ' ') {
+    return removeSpaces(string, index + 1);
+  }
+
+  return string[index] + removeSpaces(string, index + 1);
+}
+
+function toUpper(string) {
+  const lowerCase = 'abcdefghijklmnopqrstuvwxyz';
+  const upperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let upperCasedString = '';
+
+  for (let index = 0; index < string.length; index++) {
+    const charIndexOfUpperCase = findIndex(lowerCase, string[index]);
+    const isCharLowerCase = charIndexOfUpperCase !== -1;
+    upperCasedString += isCharLowerCase ? upperCase[charIndexOfUpperCase] : 
+    string[index];
+  }
+  return upperCasedString;
+}
+
 function getName(number) {
   const name = prompt('Enter name' + number + ':');
   const nameWithoutSpaces =  removeSpaces(name, 0);
@@ -71,32 +97,6 @@ function getResult(count) {
   return flamesResult;
 }
 
-function removeSpaces(string, index) {
-  if (index === string.length) {
-    return '';
-  }
-
-  if (string[index] === ' ') {
-    return removeSpaces(string, index + 1);
-  }
-
-  return string[index] + removeSpaces(string, index + 1);
-}
-
-function toUpper(string) {
-  const lowerCase = 'abcdefghijklmnopqrstuvwxyz';
-  const upperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  let upperCasedString = '';
-
-  for (let index = 0; index < string.length; index++) {
-    const charIndexOfUpperCase = findIndex(lowerCase, string[index]);
-    const isCharLowerCase = charIndexOfUpperCase !== -1;
-    upperCasedString += isCharLowerCase ? upperCase[charIndexOfUpperCase] : 
-    string[index];
-  }
-  return upperCasedString;
-}
-
 function playFlames() {
   const name1 = getName(1);
   const name2 = getName(2);
@@ -106,3 +106,12 @@ function playFlames() {
 }
 
 console.log(playFlames());
+
+// const FLAMES = '
+// ⬛⬛⬛⬛⬜⬛⬜⬜⬜⬜⬜⬛⬛⬜⬜⬛⬛⬜⬛⬛⬜⬛⬛⬛⬛⬜⬜⬛⬛⬛
+// ⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛⬜⬜⬛⬜⬛⬜⬛⬜⬛⬜⬛⬜⬜⬜⬜⬛⬜⬜⬜
+// ⬛⬛⬛⬜⬜⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬛⬜⬛⬜⬛⬜⬛⬛⬛⬜⬜⬜⬛⬛⬜
+// ⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛⬜⬜⬛⬜⬛⬜⬜⬜⬛⬜⬛⬜⬜⬜⬜⬜⬜⬜⬛
+// ⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬛⬜⬜⬛⬜⬛⬜⬜⬜⬛⬜⬛⬛⬛⬛⬜⬛⬛⬛⬜
+// ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜
+// '

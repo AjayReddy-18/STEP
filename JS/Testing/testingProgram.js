@@ -4,7 +4,7 @@
 
 const programName = 'PROGRAM';
 const headings = ['STATUS', 'INPUT', 'EXPECTED', 'ACTUAL'];
-let columnLengths = [8, 7, 10, 8];
+const columnLengths = [8, 7, 10, 8];
 const border = getBorder(columnLengths);
 columnLengths[0] = 7;
 const heading = getHeading(headings, columnLengths);
