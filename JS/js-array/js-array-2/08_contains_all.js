@@ -1,9 +1,23 @@
-function factorial(n) {
-  if (n === 0) {
-    return 1;
+function isElementFound(set, target, left, right) {
+  if (right < left) {
+    return false;
   }
 
-  return n * factorial(n - 1);
+  if (set[left] === target || set[right] === target) {
+    return true;
+  }
+
+  return isElementFound(set, target, left + 1, right - 1);
+}
+
+function containsAll(array, elements) {
+  for (let index = 0; index < elements.length; index++) {
+    if (!isElementFound(array, elements[index], 0, array.length - 1)) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 // PROGRAM END //
@@ -71,10 +85,12 @@ function printRow(rowData, columnLengths) {
 }
 
 function testFunction(input, expected) {
-  const actual = factorial(input);
-  const isPassed = Object.is(expected, actual);
+  const actual = containsAll(input[0], input[1]);
+  const isPassed = expected === actual;
 
-  const result = ['   ' + getMark(isPassed), input, expected, actual];
+  const result = ['   ' + getMark(isPassed), input[0], input[1]];
+  result[result.length] = expected;
+  result[result.length] = actual;
   return result;
 }
 
@@ -106,28 +122,27 @@ function generateReport(programName, heading, columnLengths, border, results) {
   console.log();
 }
 
-function getTestCases(index) {
-  const testCases = [];
-  testCases.push([0, 1][index]);
-  testCases.push([1, 1][index]);
-  testCases.push([2, 2][index]);
-  testCases.push([3, 6][index]);
-  testCases.push([4, 24][index]);
-  testCases.push([5, 120][index]);
+function getTestCasesData(index) {
+  const testCasesData = [];
+  testCasesData.push([[[1, 2, 3], [2, 1]], true][index]);
+  testCasesData.push([[[1, 2, 3], [2, 1, 4]], false][index]);
+  testCasesData.push([[[1, 2, 3], [2, 1, 3]], true][index]);
+  testCasesData.push([[[1, 2, 3, 4], [21, 1, 3]], false][index]);
+  testCasesData.push([[[1, 2, 31], [2, 1, 3]], false][index]);
 
   return testCases;
 }
 
 function main() {
-  const programName = 'PROGRAM';
-  const headings = ['STATUS', 'INPUT', 'EXPECTED', 'ACTUAL'];
-  const columnLengths = [8, 7, 10, 8];
+  const programName = 'CONTAINS ALL';
+  const headings = ['STATUS', 'ARRAY 1', 'ARRAY 2', 'EXPECTED', 'ACTUAL'];
+  const columnLengths = [8, 13, 13, 10, 8];
   const border = getBorder(columnLengths);
   columnLengths[0] = 7;
   const heading = getHeading(headings, columnLengths);
 
-  const testCases = getTestCases(0);
-  const expectations = getTestCases(1);
+  const testCases = getTestCasesData(0);
+  const expectations = getTestCasesData(1);
 
   const results = testAll(testCases, expectations);
   generateReport(programName, heading, columnLengths, border, results);

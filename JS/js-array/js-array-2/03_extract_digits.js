@@ -1,9 +1,14 @@
-function factorial(n) {
-  if (n === 0) {
-    return 1;
-  }
+function extractDigits(number) {
+  let absNumber = Math.abs(number);
 
-  return n * factorial(n - 1);
+  const digits = [];
+  do {
+    const remainder = absNumber % 10;
+    digits.unshift(remainder);
+    absNumber = Math.floor(absNumber / 10);
+  } while (absNumber !== 0);
+
+  return digits;
 }
 
 // PROGRAM END //
@@ -70,17 +75,36 @@ function printRow(rowData, columnLengths) {
   console.log(row);
 }
 
+function areArraysEqual(array1, array2, left, right) {
+  if (right < left) {
+    return true;
+  }
+  
+  if (array1[left] !== array2[left] || array1[right] !== array2[right]) {
+    return false;
+  }
+  
+  return areArraysEqual(array1, array2, left + 1, right - 1);
+}
+
+function areEqual(array1, array2) {
+  if (array1.length !== array2.length) {
+    return false;
+  }
+  
+  return areArraysEqual(array1, array2, 0, array1.length - 1);
+}
+
 function testFunction(input, expected) {
-  const actual = factorial(input);
-  const isPassed = Object.is(expected, actual);
+  const actual = extractDigits(input);
+  const isPassed = areEqual(expected, actual);
 
   const result = ['   ' + getMark(isPassed), input, expected, actual];
   return result;
 }
 
 function printHeading(programName, border, heading) {
-  const spaces = getSpaces(border.length / 2);
-  console.log('\n' + spaces + programName + '\n');
+  console.log('\n\t\t' + programName + '\n');
   console.log(border);
   console.log(heading);
   console.log(border);
@@ -106,28 +130,29 @@ function generateReport(programName, heading, columnLengths, border, results) {
   console.log();
 }
 
-function getTestCases(index) {
-  const testCases = [];
-  testCases.push([0, 1][index]);
-  testCases.push([1, 1][index]);
-  testCases.push([2, 2][index]);
-  testCases.push([3, 6][index]);
-  testCases.push([4, 24][index]);
-  testCases.push([5, 120][index]);
+function getTestCasesData(index) {
+  const testCasesData = [];
+  testCasesData.push([0, [0]][index]);
+  testCasesData.push([101, [1, 0, 1]][index]);
+  testCasesData.push([201, [2, 0, 1]][index]);
+  testCasesData.push([123, [1, 2, 3]][index]);
+  testCasesData.push([-123, [1, 2, 3]][index]);
+  // testCasesData.push([12.3, [1, 2, 3]][index]);
+  // testCasesData.push([12.03, [1, 2, 0, 3]][index]);
 
   return testCases;
 }
 
 function main() {
-  const programName = 'PROGRAM';
+  const programName = 'EXTRACT DIGIT';
   const headings = ['STATUS', 'INPUT', 'EXPECTED', 'ACTUAL'];
   const columnLengths = [8, 7, 10, 8];
   const border = getBorder(columnLengths);
   columnLengths[0] = 7;
   const heading = getHeading(headings, columnLengths);
 
-  const testCases = getTestCases(0);
-  const expectations = getTestCases(1);
+  const testCases = getTestCasesData(0);
+  const expectations = getTestCasesData(1);
 
   const results = testAll(testCases, expectations);
   generateReport(programName, heading, columnLengths, border, results);

@@ -1,9 +1,25 @@
-function factorial(n) {
-  if (n === 0) {
-    return 1;
+function isElementFound(set, target, left, right) {
+  if (right < left) {
+    return false;
   }
 
-  return n * factorial(n - 1);
+  if (set[left] === target || set[right] === target) {
+    return true;
+  }
+
+  return isElementFound(set, target, left + 1, right - 1);
+}
+
+function difference(array1, array2) {
+  let differenceArray = [];
+
+  for (let index = 0; index < array1.length; index++) {
+    if (!isElementFound(array2, array1[index], 0, array2.length - 1)) {
+      differenceArray.push(array1[index]);
+    }
+  }
+
+  return differenceArray;
 }
 
 // PROGRAM END //
@@ -70,11 +86,33 @@ function printRow(rowData, columnLengths) {
   console.log(row);
 }
 
-function testFunction(input, expected) {
-  const actual = factorial(input);
-  const isPassed = Object.is(expected, actual);
+function areArraysEqual(array1, array2, left, right) {
+  if (right < left) {
+    return true;
+  }
 
-  const result = ['   ' + getMark(isPassed), input, expected, actual];
+  if (array1[left] !== array2[left] || array1[right] !== array2[right]) {
+    return false;
+  }
+
+  return areArraysEqual(array1, array2, left + 1, right - 1);
+}
+
+function areEqual(array1, array2) {
+  if (array1.length !== array2.length) {
+    return false;
+  }
+
+  return areArraysEqual(array1, array2, 0, array1.length - 1);
+}
+
+function testFunction(input, expected) {
+  const actual = difference(input[0], input[1]);
+  const isPassed = areEqual(expected, actual);
+
+  const result = ['   ' + getMark(isPassed), input[0], input[1]];
+  result[result.length] = expected;
+  result[result.length] = actual;
   return result;
 }
 
@@ -106,28 +144,27 @@ function generateReport(programName, heading, columnLengths, border, results) {
   console.log();
 }
 
-function getTestCases(index) {
-  const testCases = [];
-  testCases.push([0, 1][index]);
-  testCases.push([1, 1][index]);
-  testCases.push([2, 2][index]);
-  testCases.push([3, 6][index]);
-  testCases.push([4, 24][index]);
-  testCases.push([5, 120][index]);
+function getTestCasesData(index) {
+  const testCasesData = [];
+  testCasesData.push([[[1], [2, 1]], []][index]);
+  testCasesData.push([[[1, 2, 3, 4], [2, 3, 4]], [1]][index]);
+  testCasesData.push([[[1, 2, 3, 4], [5, 6]], [1, 2, 3, 4]][index]);
+  testCasesData.push([[[1, 2, 3, 4], [1, 2, 3, 4]], []][index]);
+  testCasesData.push([[[2, 3, 4], [1, 2, 3, 4]], []][index]);
 
   return testCases;
 }
 
 function main() {
-  const programName = 'PROGRAM';
-  const headings = ['STATUS', 'INPUT', 'EXPECTED', 'ACTUAL'];
-  const columnLengths = [8, 7, 10, 8];
+  const programName = 'DIFFERENCE';
+  const headings = ['STATUS', 'ARRAY 1', 'ARRAY 2', 'EXPECTED', 'ACTUAL'];
+  const columnLengths = [8, 15, 15, 16, 16];
   const border = getBorder(columnLengths);
   columnLengths[0] = 7;
   const heading = getHeading(headings, columnLengths);
 
-  const testCases = getTestCases(0);
-  const expectations = getTestCases(1);
+  const testCases = getTestCasesData(0);
+  const expectations = getTestCasesData(1);
 
   const results = testAll(testCases, expectations);
   generateReport(programName, heading, columnLengths, border, results);
