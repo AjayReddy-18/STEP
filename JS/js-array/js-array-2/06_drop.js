@@ -9,77 +9,110 @@ function drop(array, number) {
 
 // PROGRAM END //
 
-// Testing World! 
+// Testing...
 
-function getHyphens(length) {
-  let hyphenString = '';
-  for (let counter = 0; counter < length; counter++) {
-    hyphenString += '-';
+function repeat(char, times) {
+  let repeatedString = '';
+  for (let counter = 0; counter < times; counter++) {
+    repeatedString += char;
   }
 
-  return hyphenString;
+  return repeatedString;
+}
+
+function joinPipes(array) {
+  return '|' + array.join('|') + '|';
+}
+
+function alignSpaces(string, columnLength) {
+  const dataLength = ('' + string).length;
+  const requiredSpaces = columnLength - dataLength;
+  const spaces = repeat(' ', Math.floor(requiredSpaces / 2));
+  const columnData = spaces + string + spaces;
+  const isLengthMatched = columnLength === columnData.length;
+  
+  return isLengthMatched ? columnData : columnData + ' ';
+}
+
+function getRow(rowData, columnLengths) {
+  const row = [];
+  
+  for (let column = 0; column < rowData.length; column++) {
+    row.push(alignSpaces(rowData[column], columnLengths[column]));
+  }
+  
+  return joinPipes(row);
 }
 
 function getBorder(columnLengths) {
-  let border = '+';
+  const border = [];
+
   for (let column = 0; column < columnLengths.length; column++) {
-    border += getHyphens(columnLengths[column]);
-    border += '+';
+    border.push(':' + repeat('-', columnLengths[column] - 2) + ':');
   }
 
-  return border;
+  return joinPipes(border);
 }
 
-function getSpaces(length) {
-  let spaces = '';
+function printHeading(programName, headings, columnLengths) {
+  console.log('\n# ' + programName + '\n');
+  console.log(getRow(headings, columnLengths));
+  console.log(getBorder(columnLengths));
+}
 
-  for (let counter = 0; counter < length; counter++) {
-    spaces += ' ';
+function printReport(programName, heading, columnLengths, results) {
+  printHeading(programName, heading, columnLengths);
+  columnLengths[0] = 7;
+  
+  for (let index = 0; index < results.length; index++) {
+    console.log(getRow(results[index], columnLengths));
+  }
+  console.log();
+}
+
+function getMaxColumnLengths(row, columnLengths) {
+  const maxColumnLengths = [];
+
+  for (let column = 0; column < row.length; column++) {
+    const currentColLength = ('' + row[column]).length;
+    maxColumnLengths.push(Math.max(currentColLength, columnLengths[column]));
   }
 
-  return spaces;
+  return maxColumnLengths;
 }
 
-function getHeading(headings, columnLengths) {
-  let heading = '|';
-
-  for (let column = 0; column < headings.length; column++) {
-    const requiredSpaces = (columnLengths[column] - headings[column].length);
-    const spaces = getSpaces(requiredSpaces / 2);
-
-    heading += spaces + headings[column] + spaces + '|';
+function getColumnLengths(headings, rows) {
+  let columnLengths = [];
+  
+  for (let index = 0; index < headings.length; index++) {
+    columnLengths.push(headings[index].length + 2);
   }
 
-  return heading;
-}
-
-function getMark(testStatus) {
-  return testStatus ? '✅' : '❌';
-}
-
-function printRow(rowData, columnLengths) {
-  let row = '|';
-
-  for (let column = 0; column < rowData.length; column++) {
-    const dataLength = ('' + rowData[column]).length;
-    const requiredSpaces = columnLengths[column] - dataLength;
-    const spaces = getSpaces(requiredSpaces);
-
-    row += rowData[column] + spaces + '|';
+  for (let row = 0; row < rows.length; row++) {
+    columnLengths = getMaxColumnLengths(rows[row], columnLengths);
   }
 
-  console.log(row);
+  return columnLengths;
+}
+
+function generateReport(results) {
+  const programName = '06 DROP';
+  const headings = ['STATUS', 'ARRAY', 'NUMBER', 'EXPECTED', 'ACTUAL'];
+  
+  const columnLengths = getColumnLengths(headings, results);
+  
+  printReport(programName, headings, columnLengths, results);
 }
 
 function areArraysEqual(array1, array2, left, right) {
   if (right < left) {
     return true;
   }
-
+  
   if (array1[left] !== array2[left] || array1[right] !== array2[right]) {
     return false;
   }
-
+  
   return areArraysEqual(array1, array2, left + 1, right - 1);
 }
 
@@ -87,46 +120,26 @@ function areEqual(array1, array2) {
   if (array1.length !== array2.length) {
     return false;
   }
-
+  
   return areArraysEqual(array1, array2, 0, array1.length - 1);
 }
 
 function testFunction(input, expected) {
   const actual = drop(input[0], input[1]);
-  const isPassed = areEqual(expected, actual);
+  const mark = areEqual(expected, actual) ? '✅' : '❌';
 
-  const result = ['   ' + getMark(isPassed), input[0], input[1]];
-  result[result.length] = expected;
-  result[result.length] = actual;
+  const result = [mark, input[0], input[1], expected, actual];
   return result;
-}
-
-function printHeading(programName, border, heading) {
-  const spaces = getSpaces(border.length / 2);
-  console.log('\n' + spaces + programName + '\n');
-  console.log(border);
-  console.log(heading);
-  console.log(border);
 }
 
 function testAll(testCases, expectations) {
   const results = [];
 
   for (let index = 0; index < testCases.length; index++) {
-    results[index] = testFunction(testCases[index], expectations[index]);
+    results.push(testFunction(testCases[index], expectations[index]));
   }
 
   return results;
-}
-
-function generateReport(programName, heading, columnLengths, border, results) {
-  printHeading(programName, border, heading);
-
-  for (let index = 0; index < results.length; index++) {
-    printRow(results[index], columnLengths);
-    console.log(border);
-  }
-  console.log();
 }
 
 function getTestCasesData(index) {
@@ -134,25 +147,18 @@ function getTestCasesData(index) {
   testCasesData.push([[[1, 2, 3], 1], [2, 3]][index]);
   testCasesData.push([[[1, 2, 3, 4], 2], [3, 4]][index]);
   testCasesData.push([[[1, 2, 3, 4, 5], 4], [5]][index]);
-  testCasesData.push([[[1, 2, 3], 3], []][index]);
-  testCasesData.push([[[1, 2, 3], 4], []][index]);
-
-  return testCases;
+  testCasesData.push([[[1, 2, 3], 0], [1, 2, 3]][index]);
+  testCasesData.push([[[1, 2, 3], 2], [3]][index]);
+  
+  return testCasesData;
 }
 
 function main() {
-  const programName = 'DROP';
-  const headings = ['STATUS', 'ARRAY', 'NUMBER', 'EXPECTED', 'ACTUAL'];
-  const columnLengths = [8, 13, 8, 14, 14];
-  const border = getBorder(columnLengths);
-  columnLengths[0] = 7;
-  const heading = getHeading(headings, columnLengths);
-
   const testCases = getTestCasesData(0);
   const expectations = getTestCasesData(1);
 
   const results = testAll(testCases, expectations);
-  generateReport(programName, heading, columnLengths, border, results);
+  generateReport(results);
 }
 
 main();

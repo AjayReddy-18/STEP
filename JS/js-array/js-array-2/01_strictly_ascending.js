@@ -10,104 +10,120 @@ function isStrictlyAscending(numbers) {
 
 // PROGRAM END //
 
-// Testing World! 
+// Testing...
 
-function getHyphens(length) {
-  let hyphenString = '';
-  for (let counter = 0; counter < length; counter++) {
-    hyphenString += '-';
+function repeat(char, times) {
+  let repeatedString = '';
+  for (let counter = 0; counter < times; counter++) {
+    repeatedString += char;
   }
 
-  return hyphenString;
+  return repeatedString;
+}
+
+function joinPipes(array) {
+  return '|' + array.join('|') + '|';
+}
+
+function alignSpaces(string, columnLength) {
+  const dataLength = ('' + string).length;
+  const requiredSpaces = columnLength - dataLength;
+  const spaces = repeat(' ', Math.floor(requiredSpaces / 2));
+  const columnData = spaces + string + spaces;
+  const isLengthMatched = columnLength === columnData.length;
+  
+  return isLengthMatched ? columnData : columnData + ' ';
+}
+
+function getRow(rowData, columnLengths) {
+  const row = [];
+  
+  for (let column = 0; column < rowData.length; column++) {
+    row.push(alignSpaces(rowData[column], columnLengths[column]));
+  }
+  
+  return joinPipes(row);
 }
 
 function getBorder(columnLengths) {
-  let border = '+';
+  const border = [];
+
   for (let column = 0; column < columnLengths.length; column++) {
-    border += getHyphens(columnLengths[column]);
-    border += '+';
+    border.push(':' + repeat('-', columnLengths[column] - 2) + ':');
   }
 
-  return border;
+  return joinPipes(border);
 }
 
-function getSpaces(length) {
-  let spaces = '';
+function printHeading(programName, headings, columnLengths) {
+  console.log('\n# ' + programName + '\n');
+  console.log(getRow(headings, columnLengths));
+  console.log(getBorder(columnLengths));
+}
 
-  for (let counter = 0; counter < length; counter++) {
-    spaces += ' ';
+function printReport(programName, heading, columnLengths, results) {
+  printHeading(programName, heading, columnLengths);
+  columnLengths[0] = 7;
+  
+  for (let index = 0; index < results.length; index++) {
+    console.log(getRow(results[index], columnLengths));
+  }
+  console.log();
+}
+
+function getMaxColumnLengths(row, columnLengths) {
+  const maxColumnLengths = [];
+
+  for (let column = 0; column < row.length; column++) {
+    const currentColLength = ('' + row[column]).length;
+    maxColumnLengths.push(Math.max(currentColLength, columnLengths[column]));
   }
 
-  return spaces;
+  return maxColumnLengths;
 }
 
-function getHeading(headings, columnLengths) {
-  let heading = '|';
-
-  for (let column = 0; column < headings.length; column++) {
-    const requiredSpaces = (columnLengths[column] - headings[column].length);
-    const spaces = getSpaces(requiredSpaces / 2);
-
-    heading += spaces + headings[column] + spaces + '|';
+function getColumnLengths(headings, rows) {
+  let columnLengths = [];
+  
+  for (let index = 0; index < headings.length; index++) {
+    columnLengths.push(headings[index].length + 2);
   }
 
-  return heading;
-}
-
-function getMark(testStatus) {
-  return testStatus ? '✅' : '❌';
-}
-
-function printRow(rowData, columnLengths) {
-  let row = '|';
-
-  for (let column = 0; column < rowData.length; column++) {
-    const dataLength = ('' + rowData[column]).length;
-    const requiredSpaces = columnLengths[column] - dataLength;
-    const spaces = getSpaces(requiredSpaces);
-
-    row += rowData[column] + spaces + '|';
+  for (let row = 0; row < rows.length; row++) {
+    columnLengths = getMaxColumnLengths(rows[row], columnLengths);
   }
 
-  console.log(row);
+  return columnLengths;
+}
+
+function generateReport(results) {
+  const programName = '01 STRICTLY ASCENDING';
+  const headings = ['STATUS', 'ARRAY', 'EXPECTED', 'ACTUAL'];
+  
+  const columnLengths = getColumnLengths(headings, results);
+  
+  printReport(programName, headings, columnLengths, results);
 }
 
 function testFunction(input, expected) {
   const actual = isStrictlyAscending(input);
-  const isPassed = Object.is(expected, actual);
+  const mark = Object.is(expected, actual) ? '✅' : '❌';
 
-  const result = ['   ' + getMark(isPassed), input, expected, actual];
+  const result = [mark, input, expected, actual];
   return result;
-}
-
-function printHeading(programName, border, heading) {
-  console.log('\n\t\t' + programName + '\n');
-  console.log(border);
-  console.log(heading);
-  console.log(border);
 }
 
 function testAll(testCases, expectations) {
   const results = [];
 
   for (let index = 0; index < testCases.length; index++) {
-    results[index] = testFunction(testCases[index], expectations[index]);
+    results.push(testFunction(testCases[index], expectations[index]));
   }
 
   return results;
 }
 
-function generateReport(programName, heading, columnLengths, border, results) {
-  printHeading(programName, border, heading);
-
-  for (let index = 0; index < results.length; index++) {
-    printRow(results[index], columnLengths);
-    console.log(border);
-  }
-  console.log();
-}
-
-function getTestCasesDataData(index) {
+function getTestCasesData(index) {
   const testCasesData = [];
   testCasesData.push([[1, 3, 4, 5, 16], true][index]);
   testCasesData.push([[1, 3, 2, 4], false][index]);
@@ -115,23 +131,16 @@ function getTestCasesDataData(index) {
   testCasesData.push([[1, 1, 1, 1], false][index]);
   testCasesData.push([[-1, 0, 1, 2, 3, 4], true][index]);
   testCasesData.push([[-3, -2, -1, 0], true][index]);
-
+  
   return testCasesData;
 }
 
 function main() {
-  const programName = 'IS STRICTLY ASCENDING';
-  const headings = ['STATUS', 'NUMBERS', 'EXPECTED', 'ACTUAL'];
-  const columnLengths = [8, 17, 10, 8];
-  const border = getBorder(columnLengths);
-  columnLengths[0] = 7;
-  const heading = getHeading(headings, columnLengths);
-
-  const testCases = getTestCasesDataData(0);
-  const expectations = getTestCasesDataData(1);
+  const testCases = getTestCasesData(0);
+  const expectations = getTestCasesData(1);
 
   const results = testAll(testCases, expectations);
-  generateReport(programName, heading, columnLengths, border, results);
+  generateReport(results);
 }
 
 main();

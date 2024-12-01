@@ -1,78 +1,119 @@
+function getIntegralNumber(number) {
+  if (number === Math.floor(number / 1)) {
+    return number;
+  }
+
+  return getIntegralNumber(number * 10);
+}
+
 function extractDigits(number) {
-  let absNumber = Math.abs(number);
+  let integralNumber = getIntegralNumber(Math.abs(number));
 
   const digits = [];
   do {
-    const remainder = absNumber % 10;
-    digits.unshift(remainder);
-    absNumber = Math.floor(absNumber / 10);
-  } while (absNumber !== 0);
+    const lastDigit = integralNumber % 10;
+    digits.unshift(lastDigit);
+    integralNumber = Math.floor(integralNumber / 10);
+  } while (integralNumber !== 0);
 
   return digits;
 }
 
 // PROGRAM END //
 
-// Testing World! 
+// Testing...
 
-function getHyphens(length) {
-  let hyphenString = '';
-  for (let counter = 0; counter < length; counter++) {
-    hyphenString += '-';
+function repeat(char, times) {
+  let repeatedString = '';
+  for (let counter = 0; counter < times; counter++) {
+    repeatedString += char;
   }
 
-  return hyphenString;
+  return repeatedString;
+}
+
+function joinPipes(array) {
+  return '|' + array.join('|') + '|';
+}
+
+function alignSpaces(string, columnLength) {
+  const dataLength = ('' + string).length;
+  const requiredSpaces = columnLength - dataLength;
+  const spaces = repeat(' ', Math.floor(requiredSpaces / 2));
+  const columnData = spaces + string + spaces;
+  const isLengthMatched = columnLength === columnData.length;
+  
+  return isLengthMatched ? columnData : columnData + ' ';
+}
+
+function getRow(rowData, columnLengths) {
+  const row = [];
+  
+  for (let column = 0; column < rowData.length; column++) {
+    row.push(alignSpaces(rowData[column], columnLengths[column]));
+  }
+  
+  return joinPipes(row);
 }
 
 function getBorder(columnLengths) {
-  let border = '+';
+  const border = [];
+
   for (let column = 0; column < columnLengths.length; column++) {
-    border += getHyphens(columnLengths[column]);
-    border += '+';
+    border.push(':' + repeat('-', columnLengths[column] - 2) + ':');
   }
 
-  return border;
+  return joinPipes(border);
 }
 
-function getSpaces(length) {
-  let spaces = '';
+function printHeading(programName, headings, columnLengths) {
+  console.log('\n# ' + programName + '\n');
+  console.log(getRow(headings, columnLengths));
+  console.log(getBorder(columnLengths));
+}
 
-  for (let counter = 0; counter < length; counter++) {
-    spaces += ' ';
+function printReport(programName, heading, columnLengths, results) {
+  printHeading(programName, heading, columnLengths);
+  columnLengths[0] = 7;
+  
+  for (let index = 0; index < results.length; index++) {
+    console.log(getRow(results[index], columnLengths));
+  }
+  console.log();
+}
+
+function getMaxColumnLengths(row, columnLengths) {
+  const maxColumnLengths = [];
+
+  for (let column = 0; column < row.length; column++) {
+    const currentColLength = ('' + row[column]).length;
+    maxColumnLengths.push(Math.max(currentColLength, columnLengths[column]));
   }
 
-  return spaces;
+  return maxColumnLengths;
 }
 
-function getHeading(headings, columnLengths) {
-  let heading = '|';
-
-  for (let column = 0; column < headings.length; column++) {
-    const requiredSpaces = (columnLengths[column] - headings[column].length);
-    const spaces = getSpaces(requiredSpaces / 2);
-
-    heading += spaces + headings[column] + spaces + '|';
+function getColumnLengths(headings, rows) {
+  let columnLengths = [];
+  
+  for (let index = 0; index < headings.length; index++) {
+    columnLengths.push(headings[index].length + 2);
   }
 
-  return heading;
-}
-
-function getMark(testStatus) {
-  return testStatus ? '✅' : '❌';
-}
-
-function printRow(rowData, columnLengths) {
-  let row = '|';
-
-  for (let column = 0; column < rowData.length; column++) {
-    const dataLength = ('' + rowData[column]).length;
-    const requiredSpaces = columnLengths[column] - dataLength;
-    const spaces = getSpaces(requiredSpaces);
-
-    row += rowData[column] + spaces + '|';
+  for (let row = 0; row < rows.length; row++) {
+    columnLengths = getMaxColumnLengths(rows[row], columnLengths);
   }
 
-  console.log(row);
+  return columnLengths;
+}
+
+function generateReport(results) {
+  const programName = '03 EXTRACT DIGITS';
+  const headings = ['STATUS', 'NUMBER', 'EXPECTED', 'ACTUAL'];
+  
+  const columnLengths = getColumnLengths(headings, results);
+  
+  printReport(programName, headings, columnLengths, results);
 }
 
 function areArraysEqual(array1, array2, left, right) {
@@ -97,37 +138,20 @@ function areEqual(array1, array2) {
 
 function testFunction(input, expected) {
   const actual = extractDigits(input);
-  const isPassed = areEqual(expected, actual);
+  const mark = areEqual(expected, actual) ? '✅' : '❌';
 
-  const result = ['   ' + getMark(isPassed), input, expected, actual];
+  const result = [mark, input, expected, actual];
   return result;
-}
-
-function printHeading(programName, border, heading) {
-  console.log('\n\t\t' + programName + '\n');
-  console.log(border);
-  console.log(heading);
-  console.log(border);
 }
 
 function testAll(testCases, expectations) {
   const results = [];
 
   for (let index = 0; index < testCases.length; index++) {
-    results[index] = testFunction(testCases[index], expectations[index]);
+    results.push(testFunction(testCases[index], expectations[index]));
   }
 
   return results;
-}
-
-function generateReport(programName, heading, columnLengths, border, results) {
-  printHeading(programName, border, heading);
-
-  for (let index = 0; index < results.length; index++) {
-    printRow(results[index], columnLengths);
-    console.log(border);
-  }
-  console.log();
 }
 
 function getTestCasesData(index) {
@@ -137,25 +161,19 @@ function getTestCasesData(index) {
   testCasesData.push([201, [2, 0, 1]][index]);
   testCasesData.push([123, [1, 2, 3]][index]);
   testCasesData.push([-123, [1, 2, 3]][index]);
-  // testCasesData.push([12.3, [1, 2, 3]][index]);
-  // testCasesData.push([12.03, [1, 2, 0, 3]][index]);
+  testCasesData.push([12.3, [1, 2, 3]][index]);
+  testCasesData.push([12.03, [1, 2, 0, 3]][index]);
+  testCasesData.push([0.03, [0, 0, 3]][index]);
 
-  return testCases;
+  return testCasesData;
 }
 
 function main() {
-  const programName = 'EXTRACT DIGIT';
-  const headings = ['STATUS', 'INPUT', 'EXPECTED', 'ACTUAL'];
-  const columnLengths = [8, 7, 10, 8];
-  const border = getBorder(columnLengths);
-  columnLengths[0] = 7;
-  const heading = getHeading(headings, columnLengths);
-
   const testCases = getTestCasesData(0);
   const expectations = getTestCasesData(1);
 
   const results = testAll(testCases, expectations);
-  generateReport(programName, heading, columnLengths, border, results);
+  generateReport(results);
 }
 
 main();
