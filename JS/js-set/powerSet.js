@@ -1,12 +1,18 @@
-function factorial(n) {
-  if (n === 0) {
-    return 1;
+function generatePowerSet(array) {
+  const powerSet = [[]];
+
+  for (let arrayIndex = array.length - 1; arrayIndex > -1; arrayIndex--) {
+    const currentElement = [array.at(arrayIndex)];
+    const endLength = powerSet.length;
+    for (let setIndex = 0; setIndex < endLength; setIndex++) {
+      powerSet.push(currentElement.concat(powerSet[setIndex]));
+    }
   }
 
-  return n * factorial(n - 1);
+  return powerSet;
 }
 
-// PROGRAM END //
+// Program END!
 
 // Testing...
 
@@ -85,51 +91,88 @@ function getColumnLengths(headings, rows) {
   return columnLengths;
 }
 
-function generateReport(results) {
-  const programName = 'PROGRAM';
-  const headings = ['STATUS', 'INPUT', 'EXPECTED', 'ACTUAL'];
+function generateReport(metaData, results) {
+  const programName = metaData[0];
+  const headings = metaData[1];
 
   const columnLengths = getColumnLengths(headings, results);
 
   printReport(programName, headings, columnLengths, results);
 }
 
-function testFunction(input, expected) {
-  const actual = factorial(...input);
-  const mark = Object.is(expected, actual) ? '✅' : '❌';
+function areArraysEqual(array1, array2, left, right) {
+  if (right < left) {
+    return true;
+  }
+
+  if (array1[left] !== array2[left] || array1[right] !== array2[right]) {
+    return false;
+  }
+
+  return areArraysEqual(array1, array2, left + 1, right - 1);
+}
+
+function areEqual(array1, array2) {
+  if (Object.is(array1, array2)) {
+    return true;
+  }
+
+  if (array1.length !== array2.length) {
+    return false;
+  }
+
+  return areArraysEqual(array1, array2, 0, array1.length - 1);
+}
+
+function testFunction(input, expected, functionToTest) {
+  const actual = functionToTest(...input);
+  const mark = areEqual(expected, actual) ? '✅' : '❌';
 
   const result = [mark, ...input, expected, actual];
   return result;
 }
 
-function testAll(testCases, expectations) {
+function testAll(testCases, expectations, functionToTest) {
   const results = [];
 
   for (let index = 0; index < testCases.length; index++) {
-    results.push(testFunction(testCases[index], expectations[index]));
+    const args = [testCases[index], expectations[index], functionToTest];
+    results.push(testFunction(...args));
   }
 
   return results;
 }
 
+function runTestCases(metaData, testCasesData, functionToTest) {
+  const testCases = testCasesData[0];
+  const expectations = testCasesData[1];
+
+  const results = testAll(testCases, expectations, functionToTest);
+  generateReport(metaData, results);
+}
+
 function getTestCasesData(index) {
   const testCasesData = [];
-  testCasesData.push([[0], 1][index]);
-  testCasesData.push([[1], 1][index]);
-  testCasesData.push([[2], 2][index]);
-  testCasesData.push([[3], 6][index]);
-  testCasesData.push([[4], 24][index]);
-  testCasesData.push([[5], 120][index]);
+  testCasesData.push([[[]], [[]]][index]);
+  testCasesData.push([[[1]], [[], [1]]][index]);
+  testCasesData.push([[[1, 2]], [[], [1], [2], [1, 2]]][index]);
+  testCasesData.push([[[1, 2, 3]], [[], [1], [2], [3], [1, 2], [1, 3], [2, 3],
+  [1, 2, 3]]][index]);
+  testCasesData.push([[[1, 2, 3, 4]], [[], [1], [2], [3], [4], [1, 2], [1, 3],
+  [1, 4], [2, 3], [2, 4], [3, 4], [1, 2, 3], [1, 2, 4], [1, 3, 4], [2, 3, 4],
+  [1, 2, 3, 4]]][index]);
 
   return testCasesData;
 }
 
-function main() {
-  const testCases = getTestCasesData(0);
-  const expectations = getTestCasesData(1);
+function start() {
+  const programName = 'POWER SET';
+  const headings = ['STATUS', 'ARRAY', 'EXPECTED', 'ACTUAL'];
+  const metaData = [programName, headings];
+  const testCasesData = [getTestCasesData(0), getTestCasesData(1)];
+  const functionToTest = generatePowerSet;
 
-  const results = testAll(testCases, expectations);
-  generateReport(results);
+  runTestCases(metaData, testCasesData, functionToTest);
 }
 
-main();
+start();
