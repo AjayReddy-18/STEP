@@ -1,15 +1,44 @@
-function generatePowerSet(array) {
-  const powerSet = [[]];
+function areMatricesValid(matrixA, matrixB) {
+  return matrixA[0].length === matrixB.length;
+}
 
-  for (let arrayIndex = array.length - 1; arrayIndex > -1; arrayIndex--) {
-    const currentElement = [array.at(arrayIndex)];
-    const endLength = powerSet.length;
-    for (let setIndex = 0; setIndex < endLength; setIndex++) {
-      powerSet.push(currentElement.concat(powerSet[setIndex]));
-    }
+function getProduct(rowOfA, matrixB, columnIndex) {
+  let product = 0;
+
+  for (let rowIndex = 0; rowIndex < matrixB.length; rowIndex++) {
+    product += rowOfA[rowIndex] * matrixB[rowIndex][columnIndex];
   }
 
-  return powerSet;
+  return product;
+}
+
+function getRowOfResultMatrix(rowOfA, matrixB) {
+  const multipliedMatrixRow = [];
+
+  for (let colIndexOfB = 0; colIndexOfB < matrixB[0].length; colIndexOfB++) {
+    const product = getProduct(rowOfA, matrixB, colIndexOfB);
+    multipliedMatrixRow.push(product);
+  }
+
+  return multipliedMatrixRow;
+}
+
+function getMultipliedMatrix(matrixA, matrixB) {
+  const multipliedMatrix = [];
+
+  for (let rowOfA = 0; rowOfA < matrixA.length; rowOfA++) {
+    multipliedMatrix.push(getRowOfResultMatrix(matrixA[rowOfA], matrixB));
+  }
+
+  return multipliedMatrix;
+}
+
+function multiplyMatrices(matrixA, matrixB) {
+  if (!areMatricesValid(matrixA, matrixB)) {
+    return NaN;
+  }
+
+  return getMultipliedMatrix(matrixA, matrixB);
 }
 
 // Program END!
@@ -174,27 +203,27 @@ function runTestCases(metaData, testCasesData, functionToTest) {
   generateReport(metaData, results);
 }
 
-
 function getTestCasesData(index) {
   const testCasesData = [];
-  testCasesData.push([[[]], [[]]][index]);
-  testCasesData.push([[[1]], [[], [1]]][index]);
-  testCasesData.push([[[1, 2, 3]], [[], [3], [2], [2, 3], [1], [1, 3], [1, 2],
-  [1, 2, 3]]][index]);
-  testCasesData.push([[[1, 2]], [[], [2], [1], [1, 2]]][index]);
-  testCasesData.push([[[1, 2, 3, 4]], [[], [4], [3], [3, 4], [2], [2, 4],
-  [2, 3], [2, 3, 4], [1], [1, 4], [1, 3], [1, 3, 4], [1, 2], [1, 2, 4], [1, 2, 3],
-  [1, 2, 3, 4]]][index]);
+  testCasesData.push([[[[1]], [[2]]], [[2]]][index]);
+  testCasesData.push([[[[0], [0]], [[0, 0]]], [[0, 0], [0, 0]]][index]);
+  testCasesData.push([[[[1, 2]], [[2], [1]]], [[4]]][index]);
+  testCasesData.push([[[[1, 2, 3]], [[2], [3], [4]]], [[20]]][index]);
+  testCasesData.push([[[[1, 2, 3], [4, 5, 6]], [[7, 8], [9, 10], [11, 12]]],
+  [[58, 64], [139, 154]]][index]);
+  testCasesData.push([[[[1, 2]], [[1]]], NaN][index]);
+  testCasesData.push([[[[1, 2], [3, 4], [5, 6]], [[1], [2]]],
+  [[5], [11], [17]]][index]);
 
   return testCasesData;
 }
 
 function start() {
-  const programName = 'POWER SET';
-  const headings = ['STATUS', 'ARRAY', 'EXPECTED', 'ACTUAL'];
+  const programName = 'MATRIX MULTIPLICATION';
+  const headings = ['STATUS', 'MATRIX A', 'MATRIX B', 'EXPECTED', 'ACTUAL'];
   const metaData = [programName, headings];
   const testCasesData = [getTestCasesData(0), getTestCasesData(1)];
-  const functionToTest = generatePowerSet;
+  const functionToTest = multiplyMatrices;
 
   runTestCases(metaData, testCasesData, functionToTest);
 }
