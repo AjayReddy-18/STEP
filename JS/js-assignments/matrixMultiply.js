@@ -34,6 +34,10 @@ function getMultipliedMatrix(matrixA, matrixB) {
 }
 
 function multiplyMatrices(matrixA, matrixB) {
+  if (matrixA.length === 0 || matrixB.length === 0) {
+    return [];
+  }
+
   if (!areMatricesValid(matrixA, matrixB)) {
     return NaN;
   }
@@ -206,6 +210,9 @@ function runTestCases(metaData, testCasesData, functionToTest) {
 function getTestCasesData(index) {
   const testCasesData = [];
   testCasesData.push([[[[1]], [[2]]], [[2]]][index]);
+  testCasesData.push([[[[1, 2]], [[1], [2], [3]]], NaN][index]);
+  testCasesData.push([[[[]], [[]]], NaN][index]);
+  testCasesData.push([[[], []], []][index]);
   testCasesData.push([[[[0], [0]], [[0, 0]]], [[0, 0], [0, 0]]][index]);
   testCasesData.push([[[[1, 2]], [[2], [1]]], [[4]]][index]);
   testCasesData.push([[[[1, 2, 3]], [[2], [3], [4]]], [[20]]][index]);

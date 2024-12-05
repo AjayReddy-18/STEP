@@ -11,17 +11,7 @@ function removeSpaces(string, index) {
 }
 
 function toUpper(string) {
-  const lowerCase = 'abcdefghijklmnopqrstuvwxyz';
-  const upperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  let upperCasedString = '';
-
-  for (let index = 0; index < string.length; index++) {
-    const charIndexOfUpperCase = findIndex(lowerCase, string[index]);
-    const isCharLowerCase = charIndexOfUpperCase !== -1;
-    upperCasedString += isCharLowerCase ? upperCase[charIndexOfUpperCase] : 
-    string[index];
-  }
-  return upperCasedString;
+  return string.toUpperCase();
 }
 
 function getName(number) {
@@ -106,12 +96,3 @@ function playFlames() {
 }
 
 console.log(playFlames());
-
-// const FLAMES = '
-// ⬛⬛⬛⬛⬜⬛⬜⬜⬜⬜⬜⬛⬛⬜⬜⬛⬛⬜⬛⬛⬜⬛⬛⬛⬛⬜⬜⬛⬛⬛
-// ⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛⬜⬜⬛⬜⬛⬜⬛⬜⬛⬜⬛⬜⬜⬜⬜⬛⬜⬜⬜
-// ⬛⬛⬛⬜⬜⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬛⬜⬛⬜⬛⬜⬛⬛⬛⬜⬜⬜⬛⬛⬜
-// ⬛⬜⬜⬜⬜⬛⬜⬜⬜⬜⬛⬜⬜⬛⬜⬛⬜⬜⬜⬛⬜⬛⬜⬜⬜⬜⬜⬜⬜⬛
-// ⬛⬜⬜⬜⬜⬛⬛⬛⬛⬜⬛⬜⬜⬛⬜⬛⬜⬜⬜⬛⬜⬛⬛⬛⬛⬜⬛⬛⬛⬜
-// ⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜
-// '
