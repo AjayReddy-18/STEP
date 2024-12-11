@@ -210,7 +210,7 @@ function areEqual(array1, array2) {
   if (Object.is(array1, array2)) {
     return true;
   }
-
+  
   if (array1.length !== array2.length) {
     return false;
   }
