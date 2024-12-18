@@ -1,7 +1,7 @@
 function range(from, to, step) {
   const numbers = [];
 
-  for (let start = from; start <= to; start += step) {
+  for (let start = from; start !== to; start += step) {
     numbers.push(start);
   }
 
@@ -13,7 +13,7 @@ function repeat(times) {
     return type(times);
   };
 }
-  
+
 function stars(times) {
   return '*'.repeat(times);
 }
@@ -45,7 +45,7 @@ function cycle(list) {
 }
 
 function getLinesOf(count) {
-  return range(1, count, 1);
+  return range(1, count + 1, 1);
 }
 
 function getSequence(types, rows) {
@@ -78,7 +78,7 @@ function spacedAlternatingRectangle(columns, rows) {
 
 function generateTriangle(lines, size, padding) {
   let index = 0;
-  return range(1, size, 1).map(function (times) {
+  return range(1, size + 1, 1).map(function (times) {
     return lines[index++](times).padStart(padding);
   }).join('\n');
 }
@@ -93,6 +93,30 @@ function rightAlignedTriangle(size) {
   return generateTriangle(sequence, size, size);
 }
 
+function generateDiamond(lines, size, padding) {
+  let index = 0;
+  const sequence = range(1, size + 2, 2).concat(range(size - 2, -1, -2));
+  return sequence.map(function (times) {
+    const line = lines[index++](times);
+    return line.padStart(padding - ((padding - times) >> 1));
+  }).join('\n');
+}
+
+function diamond(size) {
+  const revisedSize = (size - 1) | 1;
+  const sequence = getSequence([stars], size);
+  return generateDiamond(sequence, revisedSize, revisedSize);
+}
+
+function hollowDiamond(size) {
+  const revisedSize = (size - 1) | 1;
+  const sequence = getSequence([hollowLine], size);
+  sequence[0] = stars;
+  sequence[sequence.length - 1] = stars;
+  return generateDiamond(sequence, revisedSize, revisedSize);
+  
+}
+
 function extractFirstElement(array) {
   return array[0];
 }
@@ -105,6 +129,8 @@ function getFunction(style) {
     ['spaced-alternating-rectangle', spacedAlternatingRectangle],
     ['triangle', triangle],
     ['right-aligned-triangle', rightAlignedTriangle],
+    ['diamond', diamond],
+    ['hollow-diamond', hollowDiamond],
   ];
 
   const styles = stylesData.map(extractFirstElement);
@@ -119,8 +145,10 @@ const generatePattern = function (...args) {
 };
 
 console.log(generatePattern('filled-rectangle', [4, 3]));
-console.log(generatePattern('hollow-rectangle', [3, 4]));
+console.log(generatePattern('hollow-rectangle', [1, 1]));
 console.log(generatePattern('alternating-rectangle', [3, 4]));
 console.log(generatePattern('spaced-alternating-rectangle', [6, 7]));
 console.log(generatePattern('triangle', [3]));
 console.log(generatePattern('right-aligned-triangle', [3]));
+console.log(generatePattern('diamond', [5]));
+console.log(generatePattern('hollow-diamond', [5]));
