@@ -76,16 +76,21 @@ function spacedAlternatingRectangle(columns, rows) {
   return generateRectangle(sequence, columns);
 }
 
-function generateTriangle(lines, size) {
+function generateTriangle(lines, size, padding) {
   let index = 0;
   return range(1, size, 1).map(function (times) {
-    return lines[index++](times);
+    return lines[index++](times).padStart(padding);
   }).join('\n');
 }
 
 function triangle(size) {
   const sequence = getSequence([stars], size);
-  return generateTriangle(sequence, size);
+  return generateTriangle(sequence, size, 0);
+}
+
+function rightAlignedTriangle(size) {
+  const sequence = getSequence([stars], size);
+  return generateTriangle(sequence, size, size);
 }
 
 function extractFirstElement(array) {
@@ -99,6 +104,7 @@ function getFunction(style) {
     ['alternating-rectangle', alternatingRectangle],
     ['spaced-alternating-rectangle', spacedAlternatingRectangle],
     ['triangle', triangle],
+    ['right-aligned-triangle', rightAlignedTriangle],
   ];
 
   const styles = stylesData.map(extractFirstElement);
@@ -117,3 +123,4 @@ console.log(generatePattern('hollow-rectangle', [3, 4]));
 console.log(generatePattern('alternating-rectangle', [3, 4]));
 console.log(generatePattern('spaced-alternating-rectangle', [6, 7]));
 console.log(generatePattern('triangle', [3]));
+console.log(generatePattern('right-aligned-triangle', [3]));
