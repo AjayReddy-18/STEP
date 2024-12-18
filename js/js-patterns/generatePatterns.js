@@ -45,7 +45,7 @@ function cycle(list) {
 }
 
 function getLinesOf(count) {
-  return range(1, count, 1).fill(0);
+  return range(1, count, 1);
 }
 
 function getSequence(types, rows) {
@@ -76,6 +76,18 @@ function spacedAlternatingRectangle(columns, rows) {
   return generateRectangle(sequence, columns);
 }
 
+function generateTriangle(lines, size) {
+  let index = 0;
+  return range(1, size, 1).map(function (times) {
+    return lines[index++](times);
+  }).join('\n');
+}
+
+function triangle(size) {
+  const sequence = getSequence([stars], size);
+  return generateTriangle(sequence, size);
+}
+
 function extractFirstElement(array) {
   return array[0];
 }
@@ -86,6 +98,7 @@ function getFunction(style) {
     ['hollow-rectangle', hollowRectangle],
     ['alternating-rectangle', alternatingRectangle],
     ['spaced-alternating-rectangle', spacedAlternatingRectangle],
+    ['triangle', triangle],
   ];
 
   const styles = stylesData.map(extractFirstElement);
@@ -103,3 +116,4 @@ console.log(generatePattern('filled-rectangle', [4, 3]));
 console.log(generatePattern('hollow-rectangle', [3, 4]));
 console.log(generatePattern('alternating-rectangle', [3, 4]));
 console.log(generatePattern('spaced-alternating-rectangle', [6, 7]));
+console.log(generatePattern('triangle', [3]));
