@@ -1,0 +1,20 @@
+3 5 
+number:100 
+result:0 
+3 start 
+ten:10  
+quotient:0 
+dividend:0
+one:1 
+zero:0 
+start:7 number dividend
+DivideByTen:addNextDigit:5 dividend ten addRemainder 
+2 dividend ten dividend 
+1 quotient one quotient 
+3 DivideByTen 
+addRemainder:1 result dividend result 
+5 quotient one stop 
+7 quotient dividend 
+7 zero quotient 
+3 addNextDigit 
+stop:9
