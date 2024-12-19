@@ -1,5 +1,5 @@
 const deviceName = 'Ajays-Laptop';
-let currentDir = '~';
+let pwd = '~';
 
 function exit() {
   return '[Process completed]';  
@@ -10,14 +10,15 @@ function echo(args) {
 }
 
 function cd(args) {
-  currentDir = args.join('');
+  pwd = args.join('');
 }
 
 function unknownCommand(command) {
-  return 'unknown command ' + command;
+  return 'bush: command not found: ' + command;
 }
 
 function read() {
+  const currentDir = pwd.split('/').at(-1);
   return prompt(deviceName + ' ' + currentDir + ' %');
 }
 
@@ -31,6 +32,8 @@ function evaluate(prompt) {
       return echo(args);
     case 'cd':
       return cd(args);
+    case 'pwd':
+      return pwd;
     default:
       return unknownCommand(command);
   }
