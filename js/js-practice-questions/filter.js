@@ -1,11 +1,20 @@
 // even numbers [1, 2, 3, 4, 5] => [2, 4]
-const filterEvenNumbers = function (numbers) { };
+const filterEvenNumbers = function (numbers) { 
+  return numbers.filter((number) => number % 2 === 0);
+};
+console.log(filterEvenNumbers([1, 2, 3, 4, 5]));
 
 // words with more than 5 letters ["apple", "banana", "kiwi", "grape"] => ["banana"]
-const filterLongWords = function (words) { };
+const filterLongWords = function (words) { 
+  return words.filter((word) => word.length > 5);
+};
+console.log(filterLongWords(["apple", "banana", "kiwi", "grape"]));
 
 // people older than 30 [{name: "Alice", age: 25}, {name: "Bob", age: 35}] => [{name: "Bob", age: 35}]
-const filterAdults = function (people) { };
+const filterAdults = function (people) { 
+  return people.filter((person) => person.age > 30);
+};
+console.log(filterAdults([{name: "Alice", age: 25}, {name: "Bob", age: 35}]))
 
 // active users [{username: "alice", active: true}, {username: "bob", active: false}] => [{username: "alice", active: true}]
 // const filterActiveUsers = function (users) { };
@@ -29,7 +38,12 @@ const filterInStockProducts = function (products) { };
 const filterRecentOrders = function (orders) { };
 
 // products with a price lower than the average [{name: "item1", price: 10}, {name: "item2", price: 20}, {name: "item3", price: 5}] => [{name: "item1", price: 10}, {name: "item3", price: 5}]
-const filterBelowAveragePrice = function (products) { };
+const filterBelowAveragePrice = function (products) {
+  const total = products.reduce((total, product) => total + product.price, 0);
+  const average = total / products.length;  
+  return products.filter((product) => product.price < average);
+};
+console.log(filterBelowAveragePrice([{ name: "item1", price: 10 }, { name: "item2", price: 20 }, { name: "item3", price: 5 }]));
 
 // active users who posted in the last 7 days [{username: "alice", lastPostDate: "2024-12-01", active: true}, {username: "bob", lastPostDate: "2024-11-20", active: true}] => [{username: "alice", lastPostDate: "2024-12-01", active: true}]
 const filterRecentActiveUsers = function (users) { };
