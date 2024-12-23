@@ -203,7 +203,8 @@ const mostCommonPetType = (pets) => {
 console.log("Most common pet type:", mostCommonPetType(getPets(people)));
 
 const individualsLivingInBCities = (people) => {
-  return people.filter((person) => person.place[0] === "B").length;
+  return people.filter((person) => person.place[0].toUpperCase() === "B")
+    .length;
 };
 console.log(
   "People living in cities starting with B:",
