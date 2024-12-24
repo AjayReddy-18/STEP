@@ -112,9 +112,7 @@ const fullyVaccinatedPets = (pets) => {
 console.log("3. Total vaccinated pets:", fullyVaccinatedPets(getPets(people)));
 
 const petNamesAndTypes = (pets) => {
-  return pets.map((pet) => {
-    return { name: pet.name, type: pet.type };
-  });
+  return pets.map(({ name, type }) => ({ name, type }));
 };
 console.table(petNamesAndTypes(getPets(people)));
 
@@ -136,11 +134,11 @@ const averageAge = (people) => {
 console.log("Average age:", averageAge(people));
 
 const csGraduatesAndPets = (people) => {
-  const csGraduates = people.filter((person) =>
-    person.degrees.includes("computer science")
+  const csGraduates = people.filter(({ degrees }) =>
+    degrees.includes("computer science")
   );
 
-  const csAndPets = csGraduates.filter((graduate) => graduate.pets.length > 0);
+  const csAndPets = csGraduates.filter(({ pets }) => pets.length > 0);
 
   return {
     "CS graduates count": csGraduates.length,
@@ -192,8 +190,8 @@ const getOccurences = (frequency, type) => {
 };
 
 const mostCommonPetType = (pets) => {
-  const petTypes = pets.map(({type}) => type);
-  const petFrequency = petTypes.reduce(getOccurences, {});  
+  const petTypes = pets.map(({ type }) => type);
+  const petFrequency = petTypes.reduce(getOccurences, {});
 
   const keys = Object.keys(petFrequency);
   return keys.reduce((commonType, type) =>
