@@ -95,12 +95,12 @@ const people = [
 const employedPeople = (people) => {
   return people.filter((person) => person.employment.isEmployed).length;
 };
-console.log("Total employed people:", employedPeople(people));
+console.log("1. Total employed people:", employedPeople(people));
 
 const carOwners = (people) => {
   return people.filter((person) => person.vehicle.type === "car").length;
 };
-console.log("Total car owners:", carOwners(people));
+console.log("2. Total car owners:", carOwners(people));
 
 const getPets = (people) => {
   return people.flatMap((person) => person.pets);
@@ -109,7 +109,7 @@ const getPets = (people) => {
 const fullyVaccinatedPets = (pets) => {
   return pets.filter((pet) => pet.fullyVaccinated).length;
 };
-console.log("Total vaccinated pets:", fullyVaccinatedPets(getPets(people)));
+console.log("3. Total vaccinated pets:", fullyVaccinatedPets(getPets(people)));
 
 const petNamesAndTypes = (pets) => {
   return pets.map((pet) => {
@@ -121,7 +121,7 @@ console.table(petNamesAndTypes(getPets(people)));
 const cities = (people) => {
   return people.map((person) => person.place);
 };
-console.log("cities:", cities(people));
+console.log("5. cities:", cities(people));
 
 const petsOfUnemployed = (people) => {
   const unemployed = people.filter((person) => !person.employment.isEmployed);
@@ -185,15 +185,15 @@ console.log(
   vaccinatedPetsOfCarLess(people)
 );
 
-const getFrequency = (frequency, type) => {
+const getOccurences = (frequency, type) => {
   const olderFrequency = frequency[type] || 0;
   frequency[type] = olderFrequency + 1;
   return frequency;
 };
 
 const mostCommonPetType = (pets) => {
-  const petTypes = pets.map((pet) => pet.type);
-  const petFrequency = petTypes.reduce(getFrequency, {});
+  const petTypes = pets.map(({type}) => type);
+  const petFrequency = petTypes.reduce(getOccurences, {});  
 
   const keys = Object.keys(petFrequency);
   return keys.reduce((commonType, type) =>
@@ -218,7 +218,7 @@ console.log("Individuals without pets:", individualsWithoutPets(people));
 
 const sharedHobbies = (people) => {
   const hobbies = people.flatMap((person) => person.hobbies);
-  const frequencyOfHobbies = hobbies.reduce(getFrequency, {});
+  const frequencyOfHobbies = hobbies.reduce(getOccurences, {});
   const hobbyKeys = Object.keys(frequencyOfHobbies);
   return hobbyKeys.filter((hobby) => frequencyOfHobbies[hobby] > 1);
 };
