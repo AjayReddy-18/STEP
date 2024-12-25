@@ -229,12 +229,12 @@ console.log("More than two hobbies:", moreThanTwoHobbies(people));
 
 const hobbySharersWithRamesh = (people) => {
   const rameshHobbies = people
-    .filter((person) => person.name === "Ramesh")
-    .flatMap((person) => person.hobbies);
+    .filter(({name}) => name === "Ramesh")
+    .flatMap(({ hobbies }) => hobbies);
 
-  const otherPeople = people.filter((person) => person.name !== "Ramesh");
-  return otherPeople.filter((person) => {
-    return person.hobbies.some((hobby) => rameshHobbies.includes(hobby));
+  const otherPeople = people.filter(({name}) => name !== "Ramesh");
+  return otherPeople.filter(({hobbies}) => {
+    return hobbies.some((hobby) => rameshHobbies.includes(hobby));
   }).length;
 };
 console.log("Hobby sharers with Ramesh:", hobbySharersWithRamesh(people));
