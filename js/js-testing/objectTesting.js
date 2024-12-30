@@ -1,4 +1,4 @@
-const isEqual = (lhs, rhs) => lhs === rhs;
+const isEqual = (lhs, rhs) => Object.is(lhs, rhs);
 
 const areEqual = (lhs, rhs) => {
   if (typeof lhs !== "object") return isEqual(lhs, rhs);
