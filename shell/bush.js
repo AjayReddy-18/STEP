@@ -1,6 +1,6 @@
 const deviceName = 'Ajays-Laptop';
 let pwd = '~';
-
+  
 function exit() {
   return '[Process completed]';  
 }

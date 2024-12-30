@@ -161,23 +161,41 @@ const countVowels = function (words) {
 console.log(countVowels(["apple", "banana", "grape"]));
 
 // mergeConsecutiveDuplicates([1,1,1,2,3,3,4]) => [1,2,3,4]
-const mergeConsecutiveDuplicates = function (array) {};
+const mergeConsecutiveDuplicates = function (array) { };
+
+const getSubsequences = (array) => {
+  return array.map((element) => {
+    let current = element;
+    const subsequence = [];
+    while (array.includes(current)) {
+      subsequence.push(current++);
+    }
+    return subsequence;
+  });
+}
 
 // longestConsecutiveSubsequence([1, 2, 0, 1, 3, 4, 5]) => [0, 1, 2, 3, 4, 5]
-const longestConsecutiveSubsequence = function (numbers) {};
+const longestConsecutiveSubsequence = function (numbers) {
+  const nums = numbers.sort((a, b) => a - b);
+  const unique = nums.filter((num, index) => nums.indexOf(num) === index);
+  const subsequences = getSubsequences(unique)
+  console.log(subsequences);
+};
+console.log(longestConsecutiveSubsequence([1, 2, 0, 1, 3, 4, 5]));
 
 // topKFrequent([1,1,1,2,2,3], 2) => [1, 2]
 const topKFrequent = function (numbers, k) {
   const frequency = numbers.reduce((frequency, number) => {
-    const frequencyOfNum = frequency[number] || 0;
-    frequency[number] = frequencyOfNum + 1;
+    frequency[number] = (frequency[number] || 0) + 1;
     return frequency;
   }, {});
+
   return Object.keys(frequency)
+    .sort((a, b) => frequency[b] - frequency[a])
     .slice(0, k)
     .map((x) => +x);
 };
-console.log(topKFrequent([1, 1, 1, 2, 2, 3], 2));
+console.log(topKFrequent([4, 4, 4, 4, 3, 1, 1, 1, 2, 2], 2));
 
 // nestedAverage([[[1, 2]], [3, 4], [5, [6, 7]]]) => 4
 const nestedAverage = function (nestedNumbers) {};

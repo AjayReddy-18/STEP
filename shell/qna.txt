@@ -1,0 +1,8 @@
+what is a stream? 
+cut -d ',' -f2 srk.csv | tail +2 | sort -R 
+cut -d',' -f5,6 srk.csv
+cut -d ',' -f5 srk.csv | cut -d '!' -f2 | tail +2 | sort | uniq -c | sort -n
+cut -d ',' -f1 srk.csv | tr ' ' '\n' | sort | uniq -c | sort -nr
+
+cut -d ',' -f3 commits.csv | cut -d ' ' -f1 | sort | uniq -c | sort -rn
+cut -d ',' -f3 commits.csv | cut -d ':' -f1 | sort | uniq -c | sort -rn
