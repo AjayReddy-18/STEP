@@ -1,0 +1,15 @@
+{
+  "imports": "import { describe, test } from \"jsr:@std/testing/bdd\";\nimport { assertEquals} from \"jsr:@std/assert\";",
+  "groups": {
+    "even numbers": [
+      { "description": "zero", "input": 0, "expected": 0, "fn": "square" },
+      { "description": "two", "input": 2, "expected": 4, "fn": "square" },
+      { "description": "four", "input": 4, "expected": 16, "fn": "square" }
+    ],
+    "odd numbers": [
+      { "description": "one", "input": 1, "expected": 1, "fn": "square" },
+      { "description": "three", "input": 3, "expected": 9, "fn": "square" },
+      { "description": "five", "input": 5, "expected": 25, "fn": "square" }
+    ]
+  }
+}

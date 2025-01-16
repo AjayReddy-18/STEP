@@ -1,7 +1,5 @@
-const isEqual = (lhs, rhs) => Object.is(lhs, rhs);
-
 const areEqual = (lhs, rhs) => {
-  if (typeof lhs !== "object") return isEqual(lhs, rhs);
+  if (typeof lhs !== "object") return Object.is(lhs, rhs);
 
   const lhsKeys = Object.keys(lhs);
   const rhsKeys = Object.keys(rhs);
