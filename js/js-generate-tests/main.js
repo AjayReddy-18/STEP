@@ -1,38 +1,59 @@
-import testcases from './testcases.json' with {type: 'json'};
+import data from './testcases.json' with {type: 'json'};
 
-const groupTemplate = (group) => `describe("${group}", () => {`;
-
-const testTemplate = (description, input, expected, fn) => {
-  return `  test("${description}", () => {
-    assertEquals(${fn}(${input}), ${expected});
-  });`;
+const groupTemplate = (group, tabs = "") => {
+  return `${tabs}describe("${group}", () => {`;
 };
 
-const generateGroupTests = (groupName, group) => {
-  const code = [groupTemplate(groupName)];
-
-  code.push(
-    group.map(({ description, input, expected, fn }) => {
-      return `${testTemplate(description, input, expected, fn)}`;
-    })
-  );
-
-  code.push("})");
-
-  return code.flat().join("\n");
+const testTemplate = (description, input, expected, fn, tabs) => {
+  return `${tabs}test("${description}", () => {
+${tabs+'\t'}assertEquals(${fn}(${input}), ${expected});
+${tabs}});`;
 };
 
-const main = (testcases, path = "./test.js") => {
-  const groups = Object.keys(testcases.groups);
+const generateTest = (fn, testcase, tabs) => {
+  const { description, input, expected } = testcase;
+  return testTemplate(description, input, expected, fn, tabs);
+};
 
-  const code = groups.map((group) =>
-    generateGroupTests(group, testcases.groups[group])
-  );
+const generateGroupTests = (fn, groups, nesting) => {
+  const groupNames = Object.keys(groups);
+  const tabs = "\t".repeat(nesting);
 
-  const imports = testcases.imports;
+  const code = groupNames.map((groupName) => {
+    const group = groups[groupName];
+
+    if (!Array.isArray(group))
+      return generateGroupTests(fn, group, nesting + 1);
+
+    const tests = group
+      .map((testcase) => generateTest(fn, testcase, tabs + "\t"))
+      .join("\n\n");
+
+    const groupCode = [groupTemplate(groupName, tabs), tests, `${tabs}});`];
+
+    return groupCode.join("\n");
+  });
+
+  return code.join("\n\n");
+};
+
+const generateFunTests = (funName, groups) => {
+  const code = [generateGroupTests(funName, groups, 1)];
+  code.unshift(groupTemplate(funName));
+  code.push("});");
+
+  return code.join("\n");
+};
+
+const main = (data) => {
+  const imports = data.meta.imports.join("\n");
+  const funs = Object.keys(data.testcases);
+
+  const code = funs.map((fun) => generateFunTests(fun, data.testcases[fun]));
   code.unshift(imports);
 
-  Deno.writeTextFileSync(path, code.join("\n\n"));
+  Deno.writeTextFileSync(data.meta.path, code.join('\n\n'));
+  return code.join("\n\n");
 };
 
-main(testcases);
+console.log(main(data));
