@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rabbit Hit</title>
+
+    <style>
+      * {
+        margin: 0px;
+        box-sizing: border-box;
+        padding: 0px;
+      }
+
+      main {
+        height: 100vh;
+        width: 100vw;
+        background-color: green;
+      }
+
+      .pit {
+        height: 200px;
+        width: 200px;
+        border: 2px solid white;
+        border-radius: 50%;
+        background-color: brown;
+        position: relative;
+      }
+
+      .pits {
+        width: 90%;
+        height: 85%;
+        display: grid;
+        grid-template-rows: 100px 100px 100px;
+        grid-template-columns: 100px 100px 100px;
+        justify-content: space-evenly;
+        align-content: space-around;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="grass">
+      <section class="pits">
+        <div class="pit"></div>
+        <div class="pit"></div>
+        <div class="pit"></div>
+        <div class="pit"></div>
+        <div class="pit"></div>
+        <div class="pit"></div>
+        <div class="pit"></div>
+        <div class="pit"></div>
+        <div class="pit"></div>
+      </section>
+    </main>
+    <script>
+      const pits = document.querySelector(".pits");
+      const allPits = pits.querySelectorAll(".pit");
+      let previousPit = allPits[0];
+      const img = document.createElement("img");
+      img.style = `width: 200px; position: absolute; top: 28px`;
+      img.setAttribute("src", "./rabbit-removebg-preview.png");
+      img.setAttribute("alt", "rabbit");
+
+      img.addEventListener("click", () => {
+        console.log("You won!");
+      });
+
+      setInterval(() => {
+        previousPit.appendChild(img);
+        previousPit.removeChild(img);
+        const randomPit = Math.floor(Math.random() * allPits.length);
+        allPits[randomPit].appendChild(img);
+        previousPit = allPits[randomPit];
+      }, 1000);
+    </script>
+  </body>
+</html>

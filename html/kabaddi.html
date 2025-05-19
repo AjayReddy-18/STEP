@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Kabaddi</title>
+    <style>
+      body {
+        width: 80%;
+        height: 800px;
+      }
+
+      * {
+        border: 1px solid white;
+        box-sizing: border-box;
+      }
+
+      .court {
+        margin: 5% 12%;
+        width: 100%;
+        height: 100%;
+        display: flex;
+      }
+
+      .half {
+        width: 50%;
+        height: 100%;
+        background-color: violet;
+      }
+
+      .lobby {
+        width: 100%;
+        height: 15%;
+        background-color: orange;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: larger;
+      }
+
+      .inside {
+        width: 100%;
+        height: 70%;
+        display: flex;
+      }
+
+      .inside :first-child {
+        width: 27%;
+        height: 100%;
+      }
+
+      .inside :nth-child(2) {
+        width: 19%;
+        height: 100%;
+      }
+
+      .inside :last-child {
+        width: 54%;
+        height: 100%;
+      }
+
+      .court :last-child > .inside {
+        flex-direction: row-reverse;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="court">
+      <div class="half">
+        <div class="lobby"></div>
+        <div class="inside">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="lobby"></div>
+      </div>
+      <div class="half">
+        <div class="lobby"></div>
+        <div class="inside">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="lobby"></div>
+      </div>
+    </div>
+  </body>
+</html>
